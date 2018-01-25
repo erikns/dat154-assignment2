@@ -175,8 +175,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		draw_traffic_light(&si->signal1, {100, 100}, hdc);
-		draw_traffic_light(&si->signal2, { 300, 100 }, hdc);
+		draw_traffic_light(&si->signal1, {100, 100}, 0.5, hdc);
+		draw_traffic_light(&si->signal2, { 300, 100 }, 0.5, hdc);
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:

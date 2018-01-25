@@ -11,11 +11,18 @@ struct point {
 };
 
 struct size {
-	int width, height;
+	int x, y;
 };
 
 inline point operator+(const point &p1, const point &p2) {
 	return{p1.x + p2.x, p1.y + p2.y};
 }
 
-void draw_traffic_light(trasim::light_signal *signal, point position, HDC hdc);
+template <typename T>
+inline T operator*(const T &p1, float f) {
+	float x = p1.x * f;
+	float y = p1.y * f;
+	return{ (int)x, (int)y };
+}
+
+void draw_traffic_light(trasim::light_signal *signal, point position, float scale, HDC hdc);
