@@ -8,10 +8,9 @@ static const auto GREEN = RGB(0, 255, 0);
 static const auto YELLOW = RGB(255, 255, 0);
 
 static void draw_ellipse(HDC hdc, point p, size s, COLORREF color) {
-	solid_brush brush{ color };
-	HGDIOBJ orig = SelectObject(hdc, brush);
-	Ellipse(hdc, p.x, p.y, p.x + s.x, p.y + s.y);
-	SelectObject(hdc, orig);
+	drawing_context ctx{ hdc };
+	ctx.use_brush(color);
+	ctx.ellipse(p, s);
 }
 
 void draw_traffic_light(trasim::light_signal *signal, point position, float scale, HDC hdc) {
