@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DAT154-Assignment2.h" />
+    <ClInclude Include="debug.h" />
     <ClInclude Include="drawing.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />

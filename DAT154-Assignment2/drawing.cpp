@@ -8,10 +8,9 @@ static const auto GREEN = RGB(0, 255, 0);
 static const auto YELLOW = RGB(255, 255, 0);
 
 static void draw_ellipse(HDC hdc, point p, size s, COLORREF color) {
-	HBRUSH brush = CreateSolidBrush(color);
+	solid_brush brush{ color };
 	HGDIOBJ orig = SelectObject(hdc, brush);
 	Ellipse(hdc, p.x, p.y, p.x + s.x, p.y + s.y);
-	DeleteObject(brush);
 	SelectObject(hdc, orig);
 }
 
@@ -22,7 +21,7 @@ void draw_traffic_light(trasim::light_signal *signal, point position, float scal
 
 	switch (signal->get_state()) {
 	case signal_state::GREEN:
-		draw_ellipse(hdc, position + (point{ 0, 0 } * scale), s, RGB(200, 200, 200));
+		draw_ellipse(hdc, position + (point{ 0, 0 } * scale), s, GRAY);
 		draw_ellipse(hdc, position + (point{ 0, 100 } * scale), s, GRAY);
 		draw_ellipse(hdc, position + (point{ 0, 200 } * scale), s, GREEN);
 		break;
