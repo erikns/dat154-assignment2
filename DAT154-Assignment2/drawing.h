@@ -52,7 +52,7 @@ public:
 	}
 };
 
-// RAII class for managing stack of used brushes
+// RAII class for managing stack of used GDI objects
 class drawing_context {
 	HDC _context;
 	std::vector<HGDIOBJ> _brushstack;
