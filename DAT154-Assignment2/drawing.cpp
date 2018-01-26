@@ -61,3 +61,18 @@ void draw_signal_lines(int h_line, int v_line, HDC hdc) {
 	dc.line({ 0, v_line }, { r.right, v_line });
 	dc.line({ h_line, 0 }, { h_line, r.bottom});
 }
+
+void draw_status_text(const trasim::simulator *sim, HDC hdc) {
+	RECT client;
+	GetClientRect(WindowFromDC(hdc), &client);
+	RECT r;
+	r.bottom = client.bottom - 20;
+	r.left = 15;
+	r.right = 350;
+	r.top = client.bottom - 40;
+
+	std::wostringstream oss{};
+	oss << "West: " << sim->west_spawn_rate() << "%   North: " << sim->north_spawn_rate() << "%";
+
+	DrawText(hdc, oss.str().c_str(), -1, &r, 0);
+}

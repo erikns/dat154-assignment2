@@ -144,3 +144,4 @@ public:
 void draw_traffic_light(const trasim::light_signal *signal, point position, float scale, HDC hdc);
 void draw_cars(const std::vector<trasim::car> &cars, HDC hdc);
 void draw_signal_lines(int h_line, int v_line, HDC hdc);
+void draw_status_text(const trasim::simulator *sim, HDC hdc);

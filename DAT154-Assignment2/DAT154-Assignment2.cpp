@@ -161,6 +161,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		draw_cars(si->sim.horizontal_cars(), hdc);
 		draw_cars(si->sim.vertical_cars(), hdc);
 		draw_signal_lines(si->sim.horizontal_signal_position(), si->sim.vertical_signal_position(), hdc);
+		draw_status_text(&si->sim, hdc);
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:

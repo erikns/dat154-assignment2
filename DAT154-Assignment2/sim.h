@@ -151,6 +151,14 @@ namespace trasim {
 			return _horizontal_signal_pos;
 		}
 
+		inline int west_spawn_rate() const {
+			return _w_prob;
+		}
+
+		inline int north_spawn_rate() const {
+			return _n_prob;
+		}
+
 		// simulate system
 		inline void operator()() {
 			_step_count++;
