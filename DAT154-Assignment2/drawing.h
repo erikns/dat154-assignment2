@@ -33,7 +33,7 @@ class solid_brush {
 
 public:
 	solid_brush() : _brush{ nullptr } {}
-	explicit solid_brush(COLORREF color) : _brush{ CreateSolidBrush(color) } { TRACE(L"Create brush\n"); }
+	explicit solid_brush(COLORREF color) : _brush{ CreateSolidBrush(color) } { }
 
 	// Exclusive resource, so disable copying
 	solid_brush(const solid_brush&) = delete;
@@ -47,7 +47,6 @@ public:
 	}
 
 	~solid_brush() throw() {
-		TRACE(L"Destroy brush\n");
 		if (_brush)
 			VERIFY(DeleteObject(_brush));
 	}
@@ -58,7 +57,7 @@ class solid_pen {
 
 public:
 	solid_pen() : _pen{ nullptr } {}
-	explicit solid_pen(COLORREF color) : _pen{ CreatePen(PS_SOLID, 1, color) } { TRACE(L"Create pen\n"); }
+	explicit solid_pen(COLORREF color) : _pen{ CreatePen(PS_SOLID, 1, color) } { }
 
 	// Exclusive resource, so disable copying
 	solid_pen(const solid_pen&) = delete;
@@ -72,7 +71,6 @@ public:
 	}
 
 	~solid_pen() throw() {
-		TRACE(L"Destroy pen\n");
 		if (_pen)
 			VERIFY(DeleteObject(_pen));
 	}
@@ -87,7 +85,7 @@ class drawing_context {
 	solid_pen _pen;
 
 public:
-	explicit drawing_context(HDC hdc) : _context{ hdc } { TRACE(L"Create context\n"); }
+	explicit drawing_context(HDC hdc) : _context{ hdc } { }
 
 	drawing_context(const drawing_context&) = delete;
 	drawing_context(drawing_context &&) = delete;
@@ -128,7 +126,6 @@ public:
 	}
 
 	~drawing_context() throw() {
-		TRACE(L"Destroy context\n");
 		auto bss = _brushstack.size();
 		if (bss > 0) {
 			for (auto i = 0u; i < bss; ++i) {

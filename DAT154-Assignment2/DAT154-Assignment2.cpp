@@ -45,11 +45,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	// Main message loop:
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
-		if (!TranslateMessage(&msg))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 
 	return (int) msg.wParam;
@@ -171,10 +168,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		delete si;
 		PostQuitMessage(0);
 		break;
-	/*case WM_LBUTTONDOWN:
-		si->sim();
-		InvalidateRect(hWnd, nullptr, TRUE);
-		break;*/
+	case WM_KEYDOWN:
+		TRACE(L"Keydown!");
+		switch (wParam) {
+		case VK_LEFT:
+			si->sim.dec_w_spawn();
+			break;
+		case VK_RIGHT:
+			si->sim.inc_w_spawn();
+			break;
+		case VK_UP:
+			si->sim.inc_n_spawn();
+			break;
+		case VK_DOWN:
+			si->sim.dec_n_spawn();
+			break;
+		case VK_ESCAPE:
+			delete si;
+			PostQuitMessage(0);
+		default:
+			break;
+		}
+		break;
 	case WM_TIMER:
 		si->sim();
 		InvalidateRect(hWnd, nullptr, TRUE);
