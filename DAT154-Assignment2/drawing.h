@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "debug.h"
+#include "sim.h"
 
 namespace trasim {
 	class light_signal; // forward declaration
@@ -94,3 +95,4 @@ public:
 };
 
 void draw_traffic_light(const trasim::light_signal *signal, point position, float scale, HDC hdc);
+void draw_cars(const std::vector<trasim::car> &cars, HDC hdc);

@@ -101,8 +101,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    // Structure for managing persistent state
    StateInfo *si = new StateInfo();
-   si->sim = trasim::simulator{};
    if (!si) return FALSE;
+
+   si->sim = trasim::simulator{};
+   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{0, 300});
 
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, si);
@@ -154,6 +156,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		hdc = BeginPaint(hWnd, &ps);
 		draw_traffic_light(&si->sim.horizontal_signal(), {100, 100}, 0.5, hdc);
 		draw_traffic_light(&si->sim.vertical_signal(), { 300, 100 }, 0.5, hdc);
+		draw_cars(si->sim.horizontal_cars(), hdc);
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:

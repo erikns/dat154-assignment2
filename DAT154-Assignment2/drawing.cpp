@@ -41,3 +41,14 @@ void draw_traffic_light(const trasim::light_signal *signal, point position, floa
 		break;
 	}
 }
+
+void draw_cars(const std::vector<trasim::car> &cars, HDC hdc) {
+	drawing_context dc{ hdc };
+	dc.use_brush(RGB(255, 100, 100));
+
+	for (auto c : cars) {
+		auto pos_vec = c.position();
+		point pos{ pos_vec.x, pos_vec.y };
+		dc.ellipse(pos, size{ 10, 10 });
+	}
+}

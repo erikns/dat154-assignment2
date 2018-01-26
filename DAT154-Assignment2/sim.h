@@ -6,23 +6,33 @@
 namespace trasim {
 	struct vector2d {
 		int x, y;
-	};
 
-	inline vector2d operator+(const vector2d &a, const vector2d &b) {
-		return{ a.x + b.x, a.y + b.y };
-	}
+		inline vector2d &operator+=(const vector2d &rhs) {
+			x += rhs.x;
+			y += rhs.y;
+			return *this;
+		}
+
+		inline vector2d &operator+(const vector2d &rhs) {
+			x += rhs.x;
+			y += rhs.y;
+			return *this;
+		}
+
+		inline vector2d &operator-(const vector2d &rhs) {
+			x -= rhs.x;
+			y -= rhs.y;
+			return *this;
+		}
+	};
 
 	inline vector2d operator*(const vector2d &a, int f) {
 		return{a.x * f, a.y * f};
 	}
 
-	inline vector2d operator-(const vector2d &a, const vector2d &b) {
-		return{a.x - b.x, a.y - b.y};
-	}
-
-	inline vector2d operator+=(const vector2d &a, const vector2d &b) {
+	/*inline vector2d operator+=(const vector2d &a, const vector2d &b) {
 		return{ a.x + b.x, a.y + b.y };
-	}
+	}*/
 
 	enum class car_direction {
 		HORIZONTAL,
@@ -49,7 +59,7 @@ namespace trasim {
 		vector2d position() const { return _position; }
 
 		void operator()(int time_step, int distance_to_obstruction = std::numeric_limits<int>::max()) {
-			if (distance_to_obstruction < 5) {
+			if (distance_to_obstruction > 5) {
 				vector2d displace = _forward_speed * time_step;
 				_position += displace;
 			}
