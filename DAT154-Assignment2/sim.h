@@ -111,6 +111,14 @@ namespace trasim {
 			_n_prob = n_prob;
 		}
 
+		void inc_w_spawn(int i = 10) { _w_prob += i; }
+
+		void dec_w_spawn(int i = 10) { _w_prob -= i; }
+
+		void inc_n_spawn(int i = 10) { _n_prob += i; }
+
+		void dec_n_spawn(int i = 10) { _n_prob -= i; }
+
 		inline void add_car(car_direction dir, vector2d initial_pos, float speed_scale = 1) {
 			switch (dir) {
 			case car_direction::HORIZONTAL:
