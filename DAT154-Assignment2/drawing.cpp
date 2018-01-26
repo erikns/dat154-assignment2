@@ -13,7 +13,7 @@ static void draw_ellipse(HDC hdc, point p, size s, COLORREF color) {
 	ctx.ellipse(p, s);
 }
 
-void draw_traffic_light(trasim::light_signal *signal, point position, float scale, HDC hdc) {
+void draw_traffic_light(const trasim::light_signal *signal, point position, float scale, HDC hdc) {
 	using namespace trasim;
 	size s{ 100, 100 };
 	s = s * scale;

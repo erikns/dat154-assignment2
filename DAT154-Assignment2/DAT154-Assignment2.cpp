@@ -15,11 +15,9 @@ TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 
 struct StateInfo {
-	trasim::light_signal signal1;
-	trasim::light_signal signal2;
+	trasim::simulator sim;
 };
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
@@ -32,7 +30,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
  	// TODO: Place code here.
 	MSG msg;
-	HACCEL hAccelTable;
 
 	// Initialize global strings
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -104,8 +101,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    // Structure for managing persistent state
    StateInfo *si = new StateInfo();
-   si->signal1.set_state(trasim::signal_state::GREEN);
-   si->signal2.set_state(trasim::signal_state::RED);
+   si->sim = trasim::simulator{};
    if (!si) return FALSE;
 
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
@@ -140,7 +136,6 @@ inline StateInfo *GetWindowState(HWND hWnd) {
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	int wmId, wmEvent;
 	PAINTSTRUCT ps;
 	HDC hdc;
 
@@ -157,8 +152,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		draw_traffic_light(&si->signal1, {100, 100}, 0.5, hdc);
-		draw_traffic_light(&si->signal2, { 300, 100 }, 0.5, hdc);
+		draw_traffic_light(&si->sim.horizontal_signal(), {100, 100}, 0.5, hdc);
+		draw_traffic_light(&si->sim.vertical_signal(), { 300, 100 }, 0.5, hdc);
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:
@@ -167,8 +162,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	case WM_LBUTTONDOWN:
-		si->signal1.tick();
-		si->signal2.tick();
+		si->sim();
 		InvalidateRect(hWnd, nullptr, TRUE);
 		break;
 	default:

@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Sim">
+      <UniqueIdentifier>{dddd70b0-9459-4f93-ab68-b55a294e87a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sim">
+      <UniqueIdentifier>{438578ea-a82b-4563-8c3c-fac093da6501}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,14 +36,17 @@
     <ClInclude Include="DAT154-Assignment2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tlight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="drawing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="debug.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tlight.h">
+      <Filter>Header Files\Sim</Filter>
+    </ClInclude>
+    <ClInclude Include="sim.h">
+      <Filter>Header Files\Sim</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

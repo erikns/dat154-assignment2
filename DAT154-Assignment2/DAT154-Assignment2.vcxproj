@@ -81,6 +81,7 @@
     <ClInclude Include="debug.h" />
     <ClInclude Include="drawing.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="sim.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="tlight.h" />

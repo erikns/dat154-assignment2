@@ -93,4 +93,4 @@ public:
 	}
 };
 
-void draw_traffic_light(trasim::light_signal *signal, point position, float scale, HDC hdc);
+void draw_traffic_light(const trasim::light_signal *signal, point position, float scale, HDC hdc);
