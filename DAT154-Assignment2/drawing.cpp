@@ -52,3 +52,12 @@ void draw_cars(const std::vector<trasim::car> &cars, HDC hdc) {
 		dc.ellipse(pos, size{ 10, 10 });
 	}
 }
+
+void draw_signal_lines(int h_line, int v_line, HDC hdc) {
+	RECT r;
+	GetClientRect(WindowFromDC(hdc), &r);
+	drawing_context dc{ hdc };
+	dc.use_pen(RGB(0, 0, 0));
+	dc.line({ 0, v_line }, { r.right, v_line });
+	dc.line({ h_line, 0 }, { h_line, r.bottom});
+}

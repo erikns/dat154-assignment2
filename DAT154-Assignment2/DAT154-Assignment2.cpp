@@ -103,8 +103,21 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    StateInfo *si = new StateInfo();
    if (!si) return FALSE;
 
+   auto h_pos = 500;
+   auto v_pos = 300;
    si->sim = trasim::simulator{};
-   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{0, 300});
+   si->sim.set_params(h_pos, v_pos);
+   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{0, v_pos + 10}, 2);
+   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{ 0, v_pos + 10 }, 1);
+   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{ 0, v_pos + 10}, 1);
+   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{ 0, v_pos + 10}, 2);
+   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{ 0, v_pos + 10}, 1);
+   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 1);
+   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 2);
+   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 1);
+   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 2);
+   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 1);
+   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 2);
 
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, si);
@@ -154,9 +167,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		draw_traffic_light(&si->sim.horizontal_signal(), {100, 100}, 0.5, hdc);
-		draw_traffic_light(&si->sim.vertical_signal(), { 300, 100 }, 0.5, hdc);
+		draw_traffic_light(&si->sim.horizontal_signal(), {450, 350}, 0.2, hdc);
+		draw_traffic_light(&si->sim.vertical_signal(), { 550, 200 }, 0.2, hdc);
 		draw_cars(si->sim.horizontal_cars(), hdc);
+		draw_cars(si->sim.vertical_cars(), hdc);
+		draw_signal_lines(si->sim.horizontal_signal_position(), si->sim.vertical_signal_position(), hdc);
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:

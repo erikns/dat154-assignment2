@@ -53,11 +53,38 @@ public:
 	}
 };
 
+class solid_pen {
+	HPEN _pen;
+
+public:
+	solid_pen() : _pen{ nullptr } {}
+	explicit solid_pen(COLORREF color) : _pen{ CreatePen(PS_SOLID, 1, color) } { TRACE(L"Create pen\n"); }
+
+	// Exclusive resource, so disable copying
+	solid_pen(const solid_pen&) = delete;
+	solid_pen(solid_pen &&b) : _pen{ b._pen } { b._pen = nullptr; }
+	solid_pen &operator=(const solid_pen&) = delete;
+	solid_pen &operator=(solid_pen &&b) { _pen = b._pen; b._pen = nullptr; return *this; }
+
+	// Use wrapper as a normal HBRUSH
+	operator HPEN() const {
+		return _pen;
+	}
+
+	~solid_pen() throw() {
+		TRACE(L"Destroy pen\n");
+		if (_pen)
+			VERIFY(DeleteObject(_pen));
+	}
+};
+
 // RAII class for managing stack of used GDI objects
 class drawing_context {
 	HDC _context;
 	std::vector<HGDIOBJ> _brushstack;
+	std::vector<HGDIOBJ> _penstack;
 	solid_brush _brush;
+	solid_pen _pen;
 
 public:
 	explicit drawing_context(HDC hdc) : _context{ hdc } { TRACE(L"Create context\n"); }
@@ -73,22 +100,45 @@ public:
 		_brushstack.push_back(old_brush);
 	}
 
+	void use_pen(COLORREF color) {
+		_pen = solid_pen{ color };
+		auto old_pen = SelectObject(_context, _pen);
+		_penstack.push_back(old_pen);
+	}
+
 	void pop_brush() {
 		auto old_brush = _brushstack.back();
 		SelectObject(_context, old_brush);
 		_brushstack.pop_back();
 	}
 
+	void pop_pen() {
+		auto old_pen = _penstack.back();
+		SelectObject(_context, old_pen);
+		_penstack.pop_back();
+	}
+
 	void ellipse(point p, size s) {
 		Ellipse(_context, p.x, p.y, p.x + s.x, p.y + s.y);
 	}
 
+	void line(point from, point to) {
+		MoveToEx(_context, from.x, from.y, nullptr);
+		LineTo(_context, to.x, to.y);
+	}
+
 	~drawing_context() throw() {
 		TRACE(L"Destroy context\n");
-		auto sz = _brushstack.size();
-		if (sz > 0) {
-			for (auto i = 0u; i < sz; ++i) {
+		auto bss = _brushstack.size();
+		if (bss > 0) {
+			for (auto i = 0u; i < bss; ++i) {
 				pop_brush();
+			}
+		}
+		auto pss = _penstack.size();
+		if (pss > 0) {
+			for (auto i = 0u; i < pss; ++i) {
+				pop_pen();
 			}
 		}
 	}
@@ -96,3 +146,4 @@ public:
 
 void draw_traffic_light(const trasim::light_signal *signal, point position, float scale, HDC hdc);
 void draw_cars(const std::vector<trasim::car> &cars, HDC hdc);
+void draw_signal_lines(int h_line, int v_line, HDC hdc);
