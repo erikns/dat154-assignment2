@@ -106,18 +106,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    auto h_pos = 500;
    auto v_pos = 300;
    si->sim = trasim::simulator{};
-   si->sim.set_params(h_pos, v_pos);
-   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{0, v_pos + 10}, 2);
-   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{ 0, v_pos + 10 }, 1);
-   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{ 0, v_pos + 10}, 1);
-   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{ 0, v_pos + 10}, 2);
-   si->sim.add_car(trasim::car_direction::HORIZONTAL, trasim::vector2d{ 0, v_pos + 10}, 1);
-   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 1);
-   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 2);
-   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 1);
-   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 2);
-   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 1);
-   si->sim.add_car(trasim::car_direction::VERTICAL, trasim::vector2d{ h_pos + 10, 0 }, 2);
+   si->sim.set_signal_positions(h_pos, v_pos);
 
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, si);
@@ -164,11 +153,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
 		si = reinterpret_cast<StateInfo*>(pCreate->lpCreateParams);
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)si);
+
+		SetTimer(hWnd, 0, 250, nullptr);
+
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		draw_traffic_light(&si->sim.horizontal_signal(), {450, 350}, 0.2, hdc);
-		draw_traffic_light(&si->sim.vertical_signal(), { 550, 200 }, 0.2, hdc);
+		draw_traffic_light(&si->sim.horizontal_signal(), {450, 350}, 0.2f, hdc);
+		draw_traffic_light(&si->sim.vertical_signal(), { 550, 200 }, 0.2f, hdc);
 		draw_cars(si->sim.horizontal_cars(), hdc);
 		draw_cars(si->sim.vertical_cars(), hdc);
 		draw_signal_lines(si->sim.horizontal_signal_position(), si->sim.vertical_signal_position(), hdc);
@@ -179,7 +171,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		delete si;
 		PostQuitMessage(0);
 		break;
-	case WM_LBUTTONDOWN:
+	/*case WM_LBUTTONDOWN:
+		si->sim();
+		InvalidateRect(hWnd, nullptr, TRUE);
+		break;*/
+	case WM_TIMER:
 		si->sim();
 		InvalidateRect(hWnd, nullptr, TRUE);
 		break;

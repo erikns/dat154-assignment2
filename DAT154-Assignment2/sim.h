@@ -1,6 +1,8 @@
 #pragma once
 #include "tlight.h"
 #include <limits>
+#include <algorithm>
+#include <ctime>
 
 #undef max
 namespace trasim {
@@ -30,9 +32,16 @@ namespace trasim {
 		return{a.x * f, a.y * f};
 	}
 
-	/*inline vector2d operator+=(const vector2d &a, const vector2d &b) {
-		return{ a.x + b.x, a.y + b.y };
-	}*/
+	struct RNG{
+		RNG() {
+			std::srand(std::time(nullptr));
+		}
+
+		bool operator()(int prob) {
+			auto rn = rand() % 100;
+			return rn < prob;
+		}
+	};
 
 	enum class car_direction {
 		HORIZONTAL,
@@ -79,6 +88,9 @@ namespace trasim {
 		light_signal _horizontal_signal;
 		light_signal _vertical_signal;
 		int _step_count = 0;
+		int _w_prob = 10;
+		int _n_prob = 10;
+		RNG rng;
 
 		static const int _time_step = 1;
 		static const int _signal_change_limit = 10;
@@ -89,9 +101,14 @@ namespace trasim {
 			_vertical_signal.set_state(signal_state::RED);
 		}
 
-		void set_params(int h_signal_pos, int v_signal_pos) {
+		void set_signal_positions(int h_signal_pos, int v_signal_pos) {
 			_horizontal_signal_pos = h_signal_pos;
 			_vertical_signal_pos = v_signal_pos;
+		}
+
+		void set_spawn_probabilities(int w_prob, int n_prob) {
+			_w_prob = w_prob;
+			_n_prob = n_prob;
 		}
 
 		inline void add_car(car_direction dir, vector2d initial_pos, float speed_scale = 1) {
@@ -144,6 +161,24 @@ namespace trasim {
 				}
 				v_last_pos = c.position();
 				c(_time_step, effective_distance);
+			}
+
+			// remove cars once they have passed the junction
+			_horizontal_cars.erase(std::remove_if(_horizontal_cars.begin(), _horizontal_cars.end(), [=](const car& c) {
+				return c.position().x - _horizontal_signal_pos > 150;
+			}), _horizontal_cars.end());
+			_vertical_cars.erase(std::remove_if(_vertical_cars.begin(), _vertical_cars.end(), [=](const car& c) {
+				return c.position().y - _vertical_signal_pos > 150;
+			}), _vertical_cars.end());
+
+			// spawn new cars
+			bool spawn_w = rng(_w_prob);
+			bool spawn_n = rng(_n_prob);
+			if (spawn_w) {
+				add_car(car_direction::HORIZONTAL, vector2d{ 0, _vertical_signal_pos + 10 });
+			}
+			if (spawn_n) {
+				add_car(car_direction::VERTICAL, vector2d{ _horizontal_signal_pos + 10, 0 });
 			}
 		}
 	};
