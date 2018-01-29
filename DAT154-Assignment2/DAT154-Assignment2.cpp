@@ -187,6 +187,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case VK_ESCAPE:
 			delete si;
 			PostQuitMessage(0);
+		case VK_SPACE:
+			TRACE(L"VK_SPACE");
+			DialogBoxParam(hInst, MAKEINTRESOURCE(IDD_SETTINGS), hWnd, (DLGPROC)SettingsDlgProc, (LPARAM)si);
+			break;
 		default:
 			break;
 		}
