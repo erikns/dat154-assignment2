@@ -170,7 +170,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	case WM_KEYDOWN:
-		TRACE(L"Keydown!");
 		switch (wParam) {
 		case VK_LEFT:
 			si->sim.dec_w_spawn();
@@ -188,7 +187,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			delete si;
 			PostQuitMessage(0);
 		case VK_SPACE:
-			TRACE(L"VK_SPACE");
 			DialogBoxParam(hInst, MAKEINTRESOURCE(IDD_SETTINGS), hWnd, (DLGPROC)SettingsDlgProc, (LPARAM)si);
 			break;
 		default:
