@@ -121,6 +121,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 inline StateInfo *GetWindowState(HWND hWnd) {
 	LONG_PTR ptr = GetWindowLongPtr(hWnd, GWLP_USERDATA);
+	if (ptr == NULL) {
+		return nullptr;
+	}
 	StateInfo *stateInfo = reinterpret_cast<StateInfo*>(ptr);
 	return stateInfo;
 }
@@ -184,10 +187,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			si->sim.dec_n_spawn();
 			break;
 		case VK_ESCAPE:
-			delete si;
+			if (si) {
+				delete si;
+			}
 			PostQuitMessage(0);
 		case VK_SPACE:
-			DialogBoxParam(hInst, MAKEINTRESOURCE(IDD_SETTINGS), hWnd, (DLGPROC)SettingsDlgProc, (LPARAM)si);
+			if (si)
+				DialogBoxParam(hInst, MAKEINTRESOURCE(IDD_SETTINGS), hWnd, (DLGPROC)SettingsDlgProc, (LPARAM)si);
 			break;
 		default:
 			break;
